@@ -1,5 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <section>hello</section>
+  <section>sign out</section>
 </template>
+
+<style scoped></style>

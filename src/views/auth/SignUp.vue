@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <section>hello</section>
+  <section>sign up</section>
 </template>
