@@ -8,4 +8,15 @@ declare global {
     status: string;
     due_date: string | null | date;
   }
+
+  interface SignupDataForm {
+    name: string;
+    email: string;
+    password: string;
+  }
+
+  interface SigninDataForm {
+    email: string;
+    password: string;
+  }
 }

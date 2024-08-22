@@ -39,9 +39,13 @@ watch(dialog, (newVal) => {
   }
 });
 
-const validation = [
-  (value: string) => (value && value.length > 1) || "This field is required.",
-];
+const rules = reactive({
+  title: (v: string) => !!v || "Title is required",
+  description: (v: string) => !!v || "Description is required",
+  priority: (v: string) => !!v || "Priority is required",
+  status: (v: string) => !!v || "Status is required",
+  date: (v: string) => !!v || "Due date is required",
+});
 
 const activatorContent = computed(() => {
   if (props.isAddTask) {
@@ -89,7 +93,7 @@ const activatorContent = computed(() => {
                 <v-text-field
                   label="Title*"
                   v-model="form.title"
-                  :rules="validation"
+                  :rules="[rules.title]"
                   required
                 ></v-text-field>
               </v-col>
@@ -97,7 +101,7 @@ const activatorContent = computed(() => {
                 <v-textarea
                   label="Description*"
                   v-model="form.description"
-                  :rules="validation"
+                  :rules="[rules.description]"
                   clearable
                   required
                 ></v-textarea>
@@ -107,7 +111,7 @@ const activatorContent = computed(() => {
                   :items="['low', 'medium', 'high']"
                   label="Priority*"
                   v-model="form.priority"
-                  :rules="validation"
+                  :rules="[rules.priority]"
                   required
                 ></v-select>
               </v-col>
@@ -116,7 +120,7 @@ const activatorContent = computed(() => {
                   :items="['pending', 'In progress', 'Done']"
                   label="Status*"
                   v-model="form.status"
-                  :rules="validation"
+                  :rules="[rules.status]"
                   required
                 ></v-select>
               </v-col>
@@ -124,7 +128,7 @@ const activatorContent = computed(() => {
                 <v-date-input
                   label="Due date*"
                   v-model="form.due_date"
-                  :rules="validation"
+                  :rules="[rules.date]"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
                 ></v-date-input>
