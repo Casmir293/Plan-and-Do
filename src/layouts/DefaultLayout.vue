@@ -43,7 +43,7 @@ const rail = ref(true);
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
-      <v-main style="height: 100vh">
+      <v-main class="m-4 h-screen">
         <RouterView />
       </v-main>
     </v-layout>
