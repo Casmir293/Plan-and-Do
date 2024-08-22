@@ -4,6 +4,8 @@ import StatusColumn from "@/components/StatusColumn.vue";
 </script>
 
 <template>
-  <HeaderNav />
-  <StatusColumn />
+  <main class="max-w-[95%] lg:max-w-[97%]">
+    <HeaderNav />
+    <StatusColumn />
+  </main>
 </template>

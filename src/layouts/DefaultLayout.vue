@@ -32,18 +32,13 @@ const rail = ref(true);
 
         <v-list density="compact" nav>
           <v-list-item
-            prepend-icon="mdi-home-city"
-            title="Home"
-            value="home"
-          ></v-list-item>
-          <v-list-item
             prepend-icon="mdi-logout"
             title="Logout"
             value="logout"
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
-      <v-main class="m-4 h-screen">
+      <v-main class="m-4">
         <RouterView />
       </v-main>
     </v-layout>

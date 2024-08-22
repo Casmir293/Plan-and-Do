@@ -19,7 +19,9 @@ const status = [
           <v-icon :icon="column.icon" />
           <span class="font-semibold">{{ column.name }}</span>
         </div>
-        <TaskCard />
+        <div class="">
+          <TaskCard />
+        </div>
       </div>
     </template>
   </section>
