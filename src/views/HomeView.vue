@@ -1,12 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import HeaderNav from "@/components/HeaderNav.vue";
+import StatusColumn from "@/components/StatusColumn.vue";
+</script>
 
 <template>
-  <h1 class="text-3xl font-bold underline">Hello world!</h1>
-  <button
-    class="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3"
-  >
-    ...
-  </button>
-
-  <v-btn variant="outlined"> Button </v-btn>
+  <main class="max-w-[95%] lg:max-w-[97%]">
+    <HeaderNav />
+    <StatusColumn />
+  </main>
 </template>
