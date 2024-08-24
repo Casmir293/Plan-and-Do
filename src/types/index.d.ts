@@ -19,4 +19,16 @@ declare global {
     email: string;
     password: string;
   }
+
+  type UserId = string | null;
+
+  interface MyProfile {
+    name: string;
+    email: string;
+  }
+
+  interface ErrorResponse {
+    code: number;
+    message: string;
+  }
 }

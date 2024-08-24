@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import useAuth from "@/composables/useAuth";
 
+const { isLoading, signUp } = useAuth();
 const isValid = ref(false);
-const isLoading = ref(false);
 
 const payload = reactive<SignupDataForm>({
   name: "",
@@ -19,6 +20,11 @@ const rules = reactive({
     "Password must contain an upper case letter, a numeric character, and a special character",
   name: (v: string) => !!v || "Nickname is required",
 });
+
+const handleSubmit = async () => {
+  if (!isValid.value) return;
+  signUp(payload.name, payload.email, payload.password);
+};
 </script>
 
 <template>
@@ -66,7 +72,12 @@ const rules = reactive({
     <v-divider></v-divider>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn :disabled="!isValid" :loading="isLoading" color="grey-darken-3">
+      <v-btn
+        @click="handleSubmit"
+        :disabled="!isValid"
+        :loading="isLoading"
+        color="grey-darken-3"
+      >
         Submit
       </v-btn>
     </v-card-actions>
