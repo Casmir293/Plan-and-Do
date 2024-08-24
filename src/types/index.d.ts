@@ -19,4 +19,16 @@ declare global {
     email: string;
     password: string;
   }
+
+  // interface User {
+  //   auth: string;
+  //   email: string;
+  // }
+
+  interface Toast {
+    id?: string;
+    message: string;
+    type?: string;
+    timeout?: number;
+  }
 }

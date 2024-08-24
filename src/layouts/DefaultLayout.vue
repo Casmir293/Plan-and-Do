@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import useAuth from "@/composables/useAuth";
+
+const { logOut } = useAuth();
 
 const drawer = ref(true);
 const rail = ref(true);
@@ -35,6 +38,7 @@ const rail = ref(true);
             prepend-icon="mdi-logout"
             title="Logout"
             value="logout"
+            @click="logOut"
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
