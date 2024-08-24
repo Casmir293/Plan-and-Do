@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
+import useAuth from "@/composables/useAuth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +13,7 @@ const router = createRouter({
         {
           path: "",
           name: "Home",
+          meta: { requiresAuth: true },
           component: () => import("@/views/HomeView.vue"),
         },
       ],
@@ -47,6 +49,20 @@ const router = createRouter({
       component: () => import("@/views/NotFound.vue"),
     },
   ],
+});
+
+// Middleware Logic
+router.beforeEach((to, from, next) => {
+  const { isLoggedIn } = useAuth();
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && !isLoggedIn) {
+    next({ name: "SignIn" });
+  } else if (isLoggedIn && (to.name === "SignUp" || to.name === "SignIn")) {
+    next({ name: "Home" });
+  } else {
+    next();
+  }
 });
 
 export default router;

@@ -1,8 +1,9 @@
+import { useToast } from "vue-toastification";
 import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/user";
-import { ref } from "vue";
+import { useUserStore } from "@/stores/userStore";
+import { ref, unref } from "vue";
+import { logger } from "@/utils/helpers";
 import { useRouter } from "vue-router";
-import { useToast } from "@/composables/useToast";
 import {
   app,
   getAuth,
@@ -10,39 +11,76 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-} from "@/firebase/firebaseConfig";
+  db,
+  doc,
+  setDoc,
+  getDoc,
+} from "@/services/firebaseServices";
 
 const auth = getAuth(app);
 
 export default function useAuth() {
-  const { user } = storeToRefs(useUserStore());
-  const { addToast } = useToast();
+  const { user, userId, myProfile, isLoggedIn } = storeToRefs(useUserStore());
   const USER_STORE = useUserStore();
+  const toast = useToast();
   const isLoading = ref(false);
   const router = useRouter();
-  const error = ref<string | null>(null);
+  const error = ref<ErrorResponse | string | null>(null);
 
-  const signUp = async (email: string, password: string) => {
-    isLoading.value = true;
+  const whoAmI = async (userId: any) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      const docRef = doc(db, "users", userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        USER_STORE.myProfile = docSnap.data() as MyProfile;
+      } else {
+        await logOut();
+        toast.error("User doesn't exist", {
+          timeout: 3000,
+        });
+      }
+    } catch (err: any) {
+      error.value = err as ErrorResponse;
+
+      await logOut();
+      logger("Error fetching user ==>", error);
+
+      toast.error(`Fetch profile failed: ${error.value}`, {
+        timeout: 3000,
+      });
+    }
+  };
+
+  const signUp = async (name: string, email: string, password: string) => {
+    isLoading.value = true;
+
+    try {
+      const payload = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
-      USER_STORE.user = userCredential.user;
-      router.push({ name: "Home" });
 
-      addToast({
-        message: "Sign up successful!",
-        type: "success",
+      USER_STORE.user = payload.user;
+
+      await setDoc(doc(db, "users", payload.user.uid), {
+        name: name,
+        email: email,
+      });
+
+      router.push({ name: "SignIn" });
+
+      toast.success("Account Created! Sign in.", {
+        timeout: 3000,
       });
     } catch (err: any) {
-      error.value = err.message;
+      error.value = err as ErrorResponse;
 
-      addToast({
-        message: `Sign up failed: ${error.value}`,
-        type: "error",
+      logger("Error signing up ==>", error);
+
+      toast.error(`Sign up failed: ${error.value.code}`, {
+        timeout: 3000,
       });
     } finally {
       isLoading.value = false;
@@ -51,25 +89,23 @@ export default function useAuth() {
 
   const signIn = async (email: string, password: string) => {
     isLoading.value = true;
+
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      USER_STORE.user = userCredential.user;
+      const payload = await signInWithEmailAndPassword(auth, email, password);
+      USER_STORE.user = payload.user;
+      USER_STORE.userId = payload.user.uid;
+
       router.push({ name: "Home" });
 
-      addToast({
-        message: "Sign in successful!",
-        type: "success",
+      toast.success("Sign in successful", {
+        timeout: 3000,
       });
     } catch (err: any) {
-      error.value = err.message;
+      error.value = err as ErrorResponse;
 
-      addToast({
-        message: `Sign in failed: ${error.value}`,
-        type: "error",
+      logger("Error signing in ==>", error);
+      toast.error(`Sign in failed: ${error.value.code}`, {
+        timeout: 3000,
       });
     } finally {
       isLoading.value = false;
@@ -84,17 +120,21 @@ export default function useAuth() {
 
   const logOut = async () => {
     isLoading.value = true;
+
     try {
       await signOut(auth);
       USER_STORE.user = null;
-      router.push({ name: "SignIn" });
+      USER_STORE.userId = null;
+      USER_STORE.myProfile = null;
 
-      addToast({
-        message: "Log out successful!",
-        type: "success",
-      });
+      router.push({ name: "SignIn" });
     } catch (err: any) {
-      error.value = err.message;
+      error.value = err as ErrorResponse;
+
+      logger("Error logging out ==>", error);
+      toast.error(`Logout failed: ${error.value.code}`, {
+        timeout: 3000,
+      });
     } finally {
       isLoading.value = false;
     }
@@ -102,8 +142,11 @@ export default function useAuth() {
 
   return {
     USER: user,
+    userId: unref(userId),
+    myProfile: unref(myProfile),
     isLoading,
-    error,
+    isLoggedIn: unref(isLoggedIn),
+    whoAmI,
     signUp,
     signIn,
     initAuth,

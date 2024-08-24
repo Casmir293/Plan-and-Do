@@ -23,7 +23,7 @@ const rules = reactive({
 
 const handleSubmit = async () => {
   if (!isValid.value) return;
-  signUp(payload.email, payload.password);
+  signUp(payload.name, payload.email, payload.password);
 };
 </script>
 

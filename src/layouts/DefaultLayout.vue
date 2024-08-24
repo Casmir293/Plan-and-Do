@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import useAuth from "@/composables/useAuth";
 
-const { logOut } = useAuth();
+const { myProfile } = useAuth();
 
 const drawer = ref(true);
 const rail = ref(true);
@@ -19,7 +19,7 @@ const rail = ref(true);
       >
         <v-list-item
           prepend-avatar="https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"
-          title="John Doe"
+          :title="myProfile?.name"
           nav
         >
           <template v-slot:append>
@@ -34,12 +34,13 @@ const rail = ref(true);
         <v-divider></v-divider>
 
         <v-list density="compact" nav>
-          <v-list-item
-            prepend-icon="mdi-logout"
-            title="Logout"
-            value="logout"
-            @click="logOut"
-          ></v-list-item>
+          <router-link :to="{ name: 'SignOut' }">
+            <v-list-item
+              prepend-icon="mdi-logout"
+              title="Logout"
+              value="logout"
+            ></v-list-item>
+          </router-link>
         </v-list>
       </v-navigation-drawer>
       <v-main class="m-4">

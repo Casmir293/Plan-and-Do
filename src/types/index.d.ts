@@ -20,15 +20,15 @@ declare global {
     password: string;
   }
 
-  // interface User {
-  //   auth: string;
-  //   email: string;
-  // }
+  type UserId = string | null;
 
-  interface Toast {
-    id?: string;
+  interface MyProfile {
+    name: string;
+    email: string;
+  }
+
+  interface ErrorResponse {
+    code: number;
     message: string;
-    type?: string;
-    timeout?: number;
   }
 }
