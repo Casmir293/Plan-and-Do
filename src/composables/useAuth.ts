@@ -62,8 +62,6 @@ export default function useAuth() {
         password,
       );
 
-      USER_STORE.user = payload.user;
-
       await setDoc(doc(db, "users", payload.user.uid), {
         name: name,
         email: email,
@@ -94,7 +92,9 @@ export default function useAuth() {
       const payload = await signInWithEmailAndPassword(auth, email, password);
       USER_STORE.user = payload.user;
       USER_STORE.userId = payload.user.uid;
+      const profileId = payload.user.uid;
 
+      await whoAmI(profileId);
       router.push({ name: "Home" });
 
       toast.success("Sign in successful", {
