@@ -113,19 +113,30 @@ export default function useAuth() {
   };
 
   const initAuth = () => {
-    onAuthStateChanged(auth, (state) => {
-      user.value = state;
-    });
+    try {
+      onAuthStateChanged(auth, (state) => {
+        USER_STORE.authState = state;
+      });
+    } catch (err: any) {
+      error.value = err as ErrorResponse;
+
+      logger("Error determining auth state ==>", error);
+      toast.error(`Auth state failed: ${error.value.code}`, {
+        timeout: 3000,
+      });
+    }
   };
 
   const logOut = async () => {
     isLoading.value = true;
 
     try {
-      await signOut(auth);
       USER_STORE.user = null;
       USER_STORE.userId = null;
       USER_STORE.myProfile = null;
+      USER_STORE.authState = null;
+
+      await signOut(auth);
 
       router.push({ name: "SignIn" });
     } catch (err: any) {

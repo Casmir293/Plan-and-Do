@@ -2,11 +2,21 @@ export default {};
 
 declare global {
   interface TaskDataForm {
+    id?: string;
     title: string;
     description: string;
     priority: string;
     status: string;
-    due_date: string | null | date;
+    due_date: string | null | Date;
+  }
+
+  interface Task {
+    id: string;
+    title: string;
+    description: string;
+    priority: string;
+    status: string;
+    due_date: string | null | Date;
   }
 
   interface SignupDataForm {

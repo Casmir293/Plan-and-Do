@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from "vue";
-import { VDateInput } from "vuetify/labs/VDateInput";
+import useTask from "@/composables/useTask";
+
+const { isLoading, addTask, updateTask } = useTask();
+const isValid = ref(false);
 
 const props = defineProps({
   isAddTask: {
@@ -44,7 +47,6 @@ const rules = reactive({
   description: (v: string) => !!v || "Description is required",
   priority: (v: string) => !!v || "Priority is required",
   status: (v: string) => !!v || "Status is required",
-  date: (v: string) => !!v || "Due date is required",
 });
 
 const activatorContent = computed(() => {
@@ -72,6 +74,18 @@ const activatorContent = computed(() => {
     props: {},
   };
 });
+
+const handleSubmit = async () => {
+  if (!isValid.value) return;
+
+  if (props.isEditTask && props.task.id) {
+    await updateTask(props.task.id, form);
+  } else if (props.isAddTask) {
+    await addTask(form);
+  }
+
+  dialog.value = false;
+};
 </script>
 
 <template>
@@ -86,7 +100,7 @@ const activatorContent = computed(() => {
       </template>
 
       <v-card prepend-icon="mdi-note-edit-outline" title="Schedule Task">
-        <v-form fast-fail @submit.prevent>
+        <v-form ref="" v-model="isValid" fast-fail @submit.prevent>
           <v-card-text>
             <v-row dense>
               <v-col cols="12">
@@ -117,7 +131,7 @@ const activatorContent = computed(() => {
               </v-col>
               <v-col cols="12" md="4" sm="6">
                 <v-select
-                  :items="['pending', 'In progress', 'Done']"
+                  :items="['Pending', 'In progress', 'Completed']"
                   label="Status*"
                   v-model="form.status"
                   :rules="[rules.status]"
@@ -125,13 +139,13 @@ const activatorContent = computed(() => {
                 ></v-select>
               </v-col>
               <v-col cols="12" md="4" sm="6">
-                <v-date-input
-                  label="Due date*"
+                <p class="text-gray-500">Due date</p>
+                <input
+                  type="date"
                   v-model="form.due_date"
-                  :rules="[rules.date]"
-                  prepend-icon=""
-                  prepend-inner-icon="$calendar"
-                ></v-date-input>
+                  required
+                  class="w-full rounded-md border p-1.5"
+                />
               </v-col>
             </v-row>
 
@@ -150,7 +164,9 @@ const activatorContent = computed(() => {
             color="primary"
             text="Save"
             variant="tonal"
-            @click="dialog = false"
+            :disabled="!isValid"
+            :loading="isLoading"
+            @click="handleSubmit"
           ></v-btn>
         </v-card-actions>
       </v-card>

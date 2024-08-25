@@ -5,6 +5,7 @@ export const useUserStore = defineStore(
   "user",
   () => {
     const user = ref<any | null>(null);
+    const authState = ref<any | null>(null);
     const userId = ref<UserId>(null);
     const myProfile = ref<MyProfile | null>(null);
 
@@ -12,7 +13,7 @@ export const useUserStore = defineStore(
       return user.value !== null;
     });
 
-    return { user, myProfile, isLoggedIn, userId };
+    return { user, authState, myProfile, isLoggedIn, userId };
   },
   {
     persist: true,
