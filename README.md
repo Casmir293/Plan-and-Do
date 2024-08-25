@@ -1,39 +1,61 @@
 # Plan-and-Do
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a Schedule Manager app built with a modern tech stack to help users manage and organize their tasks effectively. The app allows users to create, update, and delete tasks, with each user having access to their own set of tasks, ensuring privacy and data security. It can be accessed live at [Plan-and-Do-App](https://plan-and-do.vercel.app/).
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- User Authentication: Secure user authentication with Firebase, ensuring each user’s data is isolated.
+- Task Management: Create, update, and delete tasks. Tasks are categorized by status: Pending, In Progress, and Completed.
+- Real-time Data: Firebase Firestore integration allows for real-time updates, ensuring that users always see the latest data.
+- State Management: Pinia is used for state management, providing a seamless and reactive experience.
+- Responsive Design: Built with Tailwind CSS and Vuetify, the app is fully responsive and mobile-friendly.
 
-## Type Support for `.vue` Imports in TS
+## Tech Stack
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- Vue.js: The progressive JavaScript framework used for building the user interface.
+- Pinia: A state management library that works seamlessly with Vue.js.
+- Firebase: Used for backend services, including Firestore for database management and Firebase Authentication for user authentication.
+- TypeScript: Ensures type safety and enhanced code quality throughout the project.
+- Vuetify: A Material Design component framework used for building a clean and accessible UI.
+- Tailwind CSS: A utility-first CSS framework used for responsive and customizable designs.
 
-## Customize configuration
+## Installation
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+To get started with the project, follow these steps:
 
-## Project Setup
+1. Clone the repository:
 
-```sh
-npm install
-```
+   ```bash
+   git clone https://github.com/Casmir293/Plan-and-Do.git
 
-### Compile and Hot-Reload for Development
+   ```
 
-```sh
-npm run dev
-```
+2. Navigate to the project directory:
 
-### Type-Check, Compile and Minify for Production
+   ```bash
+   cd Plan-and-Do
 
-```sh
-npm run build
-```
+   ```
 
-### Lint with [ESLint](https://eslint.org/)
+3. Install dependencies:
 
-```sh
-npm run lint
-```
+   ```bash
+   npm install
+
+   ```
+
+4. Set up Firebase:
+
+- Create a Firebase project and configure Firestore and Firebase Authentication.
+- Add your Firebase configuration to your .env file.
+
+5. Run the development server:
+
+   ```bash
+   npm run dev
+
+   ```
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions or improvements, feel free to create a pull request or open an issue.
