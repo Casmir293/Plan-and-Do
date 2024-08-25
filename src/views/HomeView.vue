@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import useAuth from "@/composables/useAuth";
+import useTask from "@/composables/useTask";
 import HeaderNav from "@/components/HeaderNav.vue";
 import StatusColumn from "@/components/StatusColumn.vue";
+import { onMounted } from "vue";
 
 const { myProfile } = useAuth();
+const { fetchTasks } = useTask();
+
+onMounted(() => fetchTasks());
 </script>
 
 <template>
