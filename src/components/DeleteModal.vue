@@ -1,7 +1,23 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import useTask from "@/composables/useTask";
 
+const props = defineProps({
+  task: {
+    type: Object as () => TaskDataForm,
+    default: () => ({}),
+  },
+});
+
+const { deleteTask } = useTask();
 const isDeleteDialog = ref(false);
+
+const handleSubmit = async () => {
+  if (props.task.id) {
+    await deleteTask(props.task.id);
+    isDeleteDialog.value = false;
+  }
+};
 </script>
 
 <template>
@@ -31,11 +47,7 @@ const isDeleteDialog = ref(false);
             No, Cancel
           </v-btn>
 
-          <v-btn
-            variant="tonal"
-            color="red-darken-1"
-            @click="isDeleteDialog = false"
-          >
+          <v-btn variant="tonal" color="red-darken-1" @click="handleSubmit">
             Yes, Delete
           </v-btn>
         </template>

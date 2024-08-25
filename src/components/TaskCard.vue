@@ -13,7 +13,7 @@ defineProps<{
       <div class="text-xl font-semibold">{{ task.title }}</div>
       <div class="flex items-center">
         <TaskModal :isEditTask="true" :task="task" />
-        <DeleteModal />
+        <DeleteModal :task="task" />
       </div>
     </div>
     <p>

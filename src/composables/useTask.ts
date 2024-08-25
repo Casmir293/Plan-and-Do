@@ -11,6 +11,7 @@ import {
   collection,
   doc,
   updateDoc,
+  deleteDoc,
 } from "@/services/firebaseServices";
 
 export default function useTask() {
@@ -97,5 +98,37 @@ export default function useTask() {
     }
   };
 
-  return { TASKS: tasks, isLoading, fetchTasks, addTask, updateTask };
+  const deleteTask = async (taskId: string) => {
+    isLoading.value = true;
+
+    try {
+      const taskRef = doc(db, `users/${userId}/tasks`, taskId);
+      await deleteDoc(taskRef);
+
+      await fetchTasks();
+
+      toast.success("Task deleted successfully", {
+        timeout: 3000,
+      });
+    } catch (err: any) {
+      error.value = err as ErrorResponse;
+
+      logger("Error deleting task ==>", error);
+
+      toast.error(`Delete task failed: ${error.value.code}`, {
+        timeout: 3000,
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  return {
+    TASKS: tasks,
+    isLoading,
+    fetchTasks,
+    addTask,
+    updateTask,
+    deleteTask,
+  };
 }
