@@ -9,7 +9,7 @@ const props = defineProps({
   },
 });
 
-const { deleteTask } = useTask();
+const { deleteTask, isLoading } = useTask();
 const isDeleteDialog = ref(false);
 
 const handleSubmit = async () => {
@@ -47,7 +47,12 @@ const handleSubmit = async () => {
             No, Cancel
           </v-btn>
 
-          <v-btn variant="tonal" color="red-darken-1" @click="handleSubmit">
+          <v-btn
+            :loading="isLoading"
+            variant="tonal"
+            color="red-darken-1"
+            @click="handleSubmit"
+          >
             Yes, Delete
           </v-btn>
         </template>
